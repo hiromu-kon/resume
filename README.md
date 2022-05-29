@@ -20,6 +20,7 @@
 - Laravel
 - Lumen
 - React
+- Next.js
 
 ### その他
 - 社内勉強会の運営
