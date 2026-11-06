@@ -2,13 +2,15 @@ import { copyFile, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 import { marked } from "marked";
 import puppeteer from "puppeteer";
+import { todayInJapan, updateAge } from "./age.js";
 
 const SOURCE = "README.md";
 const STYLESHEET = "site/style.css";
 const OUT_DIR = "dist";
 const PDF_NAME = "resume.pdf";
 
-const markdown = await readFile(SOURCE, "utf-8");
+// README の年齢は書いた時点で止まるので、公開するページと PDF はビルドした日の年齢にする
+const markdown = updateAge(await readFile(SOURCE, "utf-8"), todayInJapan());
 const title = markdown.match(/^# (.+)$/m)?.[1] ?? "Resume";
 
 const html = `<!doctype html>
