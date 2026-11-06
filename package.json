@@ -1,8 +1,14 @@
 {
+  "private": true,
+  "type": "module",
   "scripts": {
-    "build:pdf": "md-to-pdf README.md --config-file ./pdf-configs/config.js"
+    "build": "node scripts/build.js"
   },
   "devDependencies": {
-    "md-to-pdf": "^5.2.4"
+    "marked": "^18.1.3",
+    "puppeteer": "^25.16.0"
+  },
+  "allowScripts": {
+    "puppeteer@25.16.0": true
   }
 }
