@@ -3,6 +3,7 @@ import { pathToFileURL } from "node:url";
 import { marked } from "marked";
 import puppeteer from "puppeteer";
 import { todayInJapan, updateAge } from "./age.js";
+import { renderToc } from "./toc.js";
 
 const SOURCE = "README.md";
 const STYLESHEET = "site/style.css";
@@ -12,6 +13,21 @@ const PDF_NAME = "resume.pdf";
 // README の年齢は書いた時点で止まるので、公開するページと PDF はビルドした日の年齢にする
 const markdown = updateAge(await readFile(SOURCE, "utf-8"), todayInJapan());
 const title = markdown.match(/^# (.+)$/m)?.[1] ?? "Resume";
+
+const headings = [];
+marked.use({
+  renderer: {
+    heading({ tokens, depth }) {
+      const id = `section-${headings.length + 1}`;
+      const html = this.parser.parseInline(tokens);
+      headings.push({ id, depth, html });
+      return `<h${depth} id="${id}">${html}</h${depth}>\n`;
+    },
+  },
+});
+const body = marked.parse(markdown);
+// 目次はタイトルのすぐ下に置きたいが、見出しを全部描画するまで中身が決まらないので後から差し込む
+const content = body.replace("</h1>\n", `</h1>\n${renderToc(headings)}\n`);
 
 const html = `<!doctype html>
 <html lang="ja">
@@ -29,7 +45,7 @@ const html = `<!doctype html>
       <a class="download" href="${PDF_NAME}" download>PDF をダウンロード</a>
     </header>
     <main>
-${marked.parse(markdown)}
+${content}
     </main>
   </body>
 </html>
