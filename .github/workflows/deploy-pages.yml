@@ -3,6 +3,10 @@ name: Deploy Pages
 on:
   push:
     branches: [ main ]
+  # 誕生日に年齢を上げた PDF とページを作り直す
+  schedule:
+    - cron: "0 0 5 4 *"
+      timezone: "Asia/Tokyo"
   workflow_dispatch:
 
 permissions:
@@ -24,6 +28,7 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      - run: npm test
       # Ubuntu 23.10 以降は AppArmor が Chrome の sandbox を止める。--no-sandbox で起動するより sandbox を残せるこちらにした
       - run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
       - run: npm run build
