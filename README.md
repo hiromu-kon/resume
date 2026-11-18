@@ -14,6 +14,7 @@
 - Wantedly: <https://www.wantedly.com/id/hiro_kondou_e>
 - GitHub: <https://github.com/hiromu-kon>
 - Zenn: <https://zenn.dev/hiro_kon>
+- connpass: <https://connpass.com/user/hiromu-kon/>
 
 ## 1. 技術領域
 
